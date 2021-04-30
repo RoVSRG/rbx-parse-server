@@ -1,3 +1,4 @@
+local Promise = require(script.Parent.Deps.Promise)
 local _config = require(script.Parent._config)
 local HttpService = game:GetService("HttpService")
 
@@ -43,30 +44,33 @@ function Query.new(className)
 	end
 
 	function query:execute()
-		local fieldNumber = 0
-		for k, v in pairs(fields) do
-			fieldNumber += 1
-			local delimiter = (fieldNumber == 1) and "?" or "&"
-			
-			if typeof(v) == "table" then
-				local serialized = HttpService:JSONEncode(v)
-				url ..= string.format("%s%s=%s", delimiter, k, HttpService:UrlEncode(serialized))
-			else
-				url ..= string.format("%s%s=%s", delimiter, k, HttpService:UrlEncode(v))
+		return Promise.new(function(resolve, reject)
+			local fieldNumber = 0
+			for k, v in pairs(fields) do
+				fieldNumber += 1
+				local delimiter = (fieldNumber == 1) and "?" or "&"
+				
+				if typeof(v) == "table" then
+					local serialized = HttpService:JSONEncode(v)
+					url ..= string.format("%s%s=%s", delimiter, k, HttpService:UrlEncode(serialized))
+				else
+					url ..= string.format("%s%s=%s", delimiter, k, HttpService:UrlEncode(v))
+				end
 			end
-		end
 
-		local response = HttpService:RequestAsync({
-			Url = url,
-			Method = "GET",
-			Headers = _config:getHeaders()
-		})
+			local response = HttpService:RequestAsync({
+				Url = url,
+				Method = "GET",
+				Headers = _config:getHeaders()
+			})
 
-		if response.Success then
-			return HttpService:JSONDecode(response.Body).results, true
-		end
+			if response.Success then
+				resolve(HttpService:JSONDecode(response.Body).results, true)
+				return
+			end
 
-		return HttpService:JSONDecode(response.Body), false
+			reject(HttpService:JSONDecode(response.Body), false)
+		end)
 	end
 
 	return query
