@@ -43,6 +43,11 @@ function Query.new(className)
 		return self
 	end
 
+	function query:limit(number)
+		fields.limit = number
+		return self
+	end
+
 	function query:execute()
 		return Promise.new(function(resolve, reject)
 			local fieldNumber = 0
