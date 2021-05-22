@@ -28,11 +28,11 @@ function Functions.call(functionName, params)
         })
 
         if response.Success then
-            resolve(HttpService:JSONDecode(response.Body).results, true)
+            resolve(HttpService:JSONDecode(response.Body).result)
             return
         end
 
-        reject(HttpService:JSONDecode(response.Body), false)
+        reject(HttpService:JSONDecode(response.Body))
     end)
 end
 
