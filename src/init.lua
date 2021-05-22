@@ -2,6 +2,7 @@ local _config = require(script._config)
 local tableJoin = require(script.Util.tableJoin)
 
 local Objects = require(script.Objects)
+local Functions = require(script.Functions)
 
 local ParseServer = {}
 
@@ -19,7 +20,8 @@ function ParseServer.new()
 	end
 	
 	return tableJoin(self, {
-		Objects = Objects
+		Objects = Objects,
+		Functions = Functions
 	})	
 end
 
