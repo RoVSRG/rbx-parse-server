@@ -1,4 +1,4 @@
-local Promise = require(script.Parent.Deps.Promise)
+local Promise = require(script.Parent.Packages.Promise)
 local _config = require(script.Parent._config)
 local HttpService = game:GetService("HttpService")
 
