@@ -1,6 +1,6 @@
 [package]
-name = "kisperal/rbx-parse-server"
-version = "0.1.0"
+name = "thenerdie/rbx-parse-server"
+version = "0.1.1"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
